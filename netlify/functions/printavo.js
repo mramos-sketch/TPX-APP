@@ -50,4 +50,3 @@ function parse(html) {
     orders.push({ id: oid, hash: hm[1], name, due: dm ? dm[1] : du.text.trim(), outstanding, status: outstanding > 0 ? 'active' : paid ? 'paid' : 'done', statusLabel: st.text.trim().slice(0,60) });
   }
   return { customerName, orders: orders.slice(0,40) };
-}
