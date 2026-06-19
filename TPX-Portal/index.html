@@ -1,0 +1,1953 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0D1B2A">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="TPX PR">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>TPX PR – Portal del Cliente</title>
+
+  <!-- ── PWA Icon (iOS + Android) ── -->
+  <link rel="icon" type="image/png" href="https://www.tpxpr.com/wp-content/uploads/2024/08/Favicoin_TPX-300x300.png">
+  <link rel="apple-touch-icon" href="https://www.tpxpr.com/wp-content/uploads/2024/08/Favicoin_TPX-300x300.png">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* ── TPX Brand Colors ── */
+      --navy:        #0D1B2A;   /* Deep navy (header/hero bg) */
+      --navy-mid:    #162336;
+      --navy-light:  #1E2E42;
+      --red:         #F26522;   /* TPX Orange (primary action) */
+      --red-dark:    #d4551a;
+      --brand-blue:  #1A7ED4;   /* TPX Blue (logo color) */
+      --green:       #1A9E5C;
+      --green-bg:    #E8F8F0;
+      --yellow:      #F59E0B;
+      --yellow-bg:   #FEF3C7;
+      --blue:        #1A7ED4;
+      --blue-bg:     #E8F4FD;
+      --bg:          #F2F4F7;
+      --white:       #FFFFFF;
+      --text:        #1a1a1a;
+      --text-2:      #4B5563;
+      --text-3:      #9CA3AF;
+      --border:      #E5E7EB;
+      --shadow:      0 2px 12px rgba(0,0,0,0.08);
+      --shadow-lg:   0 8px 32px rgba(0,0,0,0.12);
+      --r:           16px;
+      --r-sm:        10px;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    #app {
+      height: 100vh;
+      height: 100dvh;
+      max-width: 430px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    /* ── SCREENS ─────────────────────────────── */
+    .screen {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: calc(80px + env(safe-area-inset-bottom));
+    }
+
+    /* ── TOP HEADER ──────────────────────────── */
+    .top-header {
+      background: var(--navy);
+      padding: calc(env(safe-area-inset-top, 16px) + 14px) 20px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 10;
+    }
+    .top-header img { height: 36px; object-fit: contain; }
+
+    /* TPX inline logo (brand-guide style) */
+    .tpx-logo {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      text-decoration: none;
+    }
+    .tpx-logo .bar {
+      width: 5px;
+      height: 36px;
+      background: var(--red);
+      border-radius: 2px;
+      margin-right: 10px;
+      flex-shrink: 0;
+    }
+    .tpx-logo .words { display: flex; flex-direction: column; gap: 0; }
+    .tpx-logo .tpx-text {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 22px;
+      color: white;
+      line-height: 1;
+      letter-spacing: 1px;
+    }
+    .tpx-logo .sub-text {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 500;
+      font-size: 8px;
+      color: rgba(255,255,255,0.65);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      line-height: 1;
+      margin-top: 3px;
+    }
+
+    .top-header .badge-count {
+      background: var(--red);
+      color: white;
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ── BACK HEADER ─────────────────────────── */
+    .back-header {
+      background: #0D1B2A;
+      padding: calc(env(safe-area-inset-top, 16px) + 14px) 20px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+    .back-btn {
+      background: rgba(255,255,255,0.15);
+      border: none;
+      color: white;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .back-header h2 { color: white; font-size: 17px; font-weight: 600; }
+
+    /* ── HERO ────────────────────────────────── */
+    .hero {
+      background: linear-gradient(145deg, #162336 0%, #0D1B2A 60%, #070f17 100%);
+      padding: 24px 20px 32px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    /* TPX chevron watermark */
+    .hero::after {
+      content: '»';
+      position: absolute;
+      right: -10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 160px;
+      font-weight: 900;
+      color: rgba(26,126,212,0.15);
+      line-height: 1;
+      pointer-events: none;
+      letter-spacing: -20px;
+    }
+    .hero .greeting { font-size: 14px; opacity: 0.75; margin-bottom: 4px; }
+    .hero .name { font-size: 22px; font-weight: 700; margin-bottom: 20px; }
+    .balance-card {
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: var(--r);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .balance-card .label { font-size: 12px; opacity: 0.75; text-transform: uppercase; letter-spacing: .5px; }
+    .balance-card .amount { font-size: 28px; font-weight: 700; margin-top: 2px; }
+    .balance-card .amount.zero { opacity: 0.5; font-size: 22px; }
+    .pay-btn {
+      background: var(--red);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 10px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+    .pay-btn:hover { background: var(--red-dark); }
+
+    /* ── CONTENT WRAPPER ─────────────────────── */
+    .content { padding: 16px; }
+
+    /* ── SECTION LABEL ───────────────────────── */
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      color: var(--text-2);
+      margin-bottom: 10px;
+      margin-top: 8px;
+    }
+
+    /* ── ORDER CARD ──────────────────────────── */
+    .order-card {
+      background: var(--white);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: transform 0.15s, box-shadow 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .order-card:active { transform: scale(0.98); box-shadow: none; }
+    .order-icon {
+      width: 46px; height: 46px;
+      border-radius: var(--r-sm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .order-icon.active  { background: #FEF0E8; }
+    .order-icon.done    { background: var(--green-bg); }
+    .order-icon.paid    { background: var(--blue-bg); }
+    .order-body { flex: 1; min-width: 0; }
+    .order-num  { font-size: 11px; color: var(--text-3); font-weight: 600; }
+    .order-name { font-size: 15px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 2px 0 5px; }
+    .order-meta { font-size: 12px; color: var(--text-2); }
+    .order-right { text-align: right; flex-shrink: 0; }
+    .order-amount { font-size: 15px; font-weight: 700; }
+    .order-amount.owed { color: var(--red); }
+    .order-amount.zero { color: var(--text-3); }
+    .chevron { color: var(--text-3); margin-top: 4px; }
+
+    /* ── STATUS BADGE ────────────────────────── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border-radius: 50px;
+      padding: 3px 9px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .badge.active   { background: var(--yellow-bg); color: #92400E; }
+    .badge.done     { background: var(--green-bg);  color: #065F46; }
+    .badge.paid     { background: var(--blue-bg);   color: #1E40AF; }
+    .badge.pending  { background: #FEE2E2; color: #991B1B; }
+
+    /* ── TABS ────────────────────────────────── */
+    .tabs {
+      display: flex;
+      background: white;
+      margin: 0 0 12px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+    .tab {
+      flex: 1;
+      padding: 12px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-2);
+      cursor: pointer;
+      border: none;
+      background: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: all 0.2s;
+    }
+    .tab.active { color: var(--red); border-bottom-color: var(--red); }
+
+    /* ── DETAIL SCREEN ───────────────────────── */
+    .detail-hero {
+      background: linear-gradient(145deg, #162336, #0D1B2A);
+      padding: 20px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    .detail-hero::after {
+      content: '»';
+      position: absolute;
+      right: -8px;
+      bottom: -20px;
+      font-size: 110px;
+      font-weight: 900;
+      color: rgba(26,126,212,0.12);
+      line-height: 1;
+      pointer-events: none;
+      letter-spacing: -15px;
+    }
+    .detail-order-num { font-size: 12px; opacity: 0.6; }
+    .detail-title { font-size: 20px; font-weight: 700; margin: 4px 0 12px; line-height: 1.3; }
+    .detail-stats { display: flex; gap: 16px; }
+    .detail-stat label { font-size: 11px; opacity: 0.65; display: block; }
+    .detail-stat span  { font-size: 15px; font-weight: 600; }
+
+    .action-row {
+      display: flex;
+      gap: 10px;
+      padding: 16px;
+    }
+    .action-btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      background: white;
+      border: none;
+      border-radius: var(--r);
+      padding: 14px 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: var(--shadow);
+      transition: transform 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .action-btn:active { transform: scale(0.95); }
+    .action-btn .icon { font-size: 24px; }
+    .action-btn.primary { background: var(--red); color: white; }
+
+    /* ── INFO ROWS ───────────────────────────── */
+    .info-section {
+      background: white;
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      margin: 0 16px 12px;
+      overflow: hidden;
+    }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 13px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-row .key { color: var(--text-2); }
+    .info-row .val { font-weight: 600; text-align: right; max-width: 60%; }
+    .info-row .val.red { color: var(--red); }
+    .info-row .val.green { color: var(--green); }
+
+    /* ── LINE ITEMS ──────────────────────────── */
+    .items-section {
+      margin: 0 16px 12px;
+    }
+    .item-card {
+      background: white;
+      border-radius: var(--r-sm);
+      box-shadow: var(--shadow);
+      padding: 12px 14px;
+      margin-bottom: 8px;
+    }
+    .item-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
+    .item-name { font-size: 14px; font-weight: 600; }
+    .item-sku  { font-size: 11px; color: var(--text-3); }
+    .item-price { font-size: 14px; font-weight: 700; }
+    .item-detail { font-size: 12px; color: var(--text-2); }
+
+    /* ── TOTALS ──────────────────────────────── */
+    .totals-section {
+      background: white;
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      margin: 0 16px 16px;
+      overflow: hidden;
+    }
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 16px;
+      font-size: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .total-row:last-child { border-bottom: none; }
+    .total-row.grand { font-weight: 700; font-size: 16px; }
+    .total-row.outstanding { font-weight: 700; font-size: 15px; color: var(--red); }
+
+    /* ── PROFILE ─────────────────────────────── */
+    .profile-header {
+      background: linear-gradient(145deg, #162336 0%, #0D1B2A 60%, #070f17 100%);
+      padding: 32px 20px 40px;
+      text-align: center;
+      color: white;
+    }
+    .avatar {
+      width: 72px; height: 72px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+      margin: 0 auto 12px;
+      border: 3px solid rgba(255,255,255,0.3);
+    }
+    .profile-name { font-size: 20px; font-weight: 700; }
+    .profile-email { font-size: 13px; opacity: 0.7; margin-top: 4px; }
+
+    .profile-section-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      color: var(--text-2);
+      padding: 16px 16px 8px;
+    }
+
+    .menu-item {
+      background: white;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--text);
+      transition: background 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .menu-item:first-child { border-radius: var(--r) var(--r) 0 0; }
+    .menu-item:last-child  { border-radius: 0 0 var(--r) var(--r); border-bottom: none; }
+    .menu-item:only-child  { border-radius: var(--r); }
+    .menu-item:active { background: var(--bg); }
+    .menu-icon { width: 36px; height: 36px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .menu-icon.red    { background: #FEE2E2; }
+    .menu-icon.blue   { background: var(--blue-bg); }
+    .menu-icon.green  { background: var(--green-bg); }
+    .menu-icon.gray   { background: var(--bg); }
+    .menu-item .label { flex: 1; font-size: 15px; font-weight: 500; }
+    .menu-item .sub   { font-size: 12px; color: var(--text-3); }
+
+    .menu-group {
+      background: white;
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      margin: 0 16px 12px;
+      overflow: hidden;
+    }
+
+    /* ── BOTTOM NAV ──────────────────────────── */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 430px;
+      background: white;
+      border-top: 1px solid var(--border);
+      display: flex;
+      z-index: 100;
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.07);
+    }
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px 0;
+      cursor: pointer;
+      color: var(--text-3);
+      font-size: 10px;
+      font-weight: 600;
+      gap: 3px;
+      border: none;
+      background: none;
+      transition: color 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .nav-item.active { color: var(--red); }
+    .nav-item svg { width: 22px; height: 22px; }
+
+    /* ── EMPTY STATE ─────────────────────────── */
+    .empty-state {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--text-2);
+    }
+    .empty-state .emoji { font-size: 48px; margin-bottom: 12px; }
+    .empty-state h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+    .empty-state p  { font-size: 14px; line-height: 1.5; }
+
+    /* ── SHIMMER (loading) ───────────────────── */
+    @keyframes shimmer {
+      0%   { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+
+    /* ── UTILS ───────────────────────────────── */
+    .mt4  { margin-top: 4px; }
+    .mt8  { margin-top: 8px; }
+    .mt16 { margin-top: 16px; }
+    .flex-between { display: flex; justify-content: space-between; align-items: center; }
+    .text-sm { font-size: 13px; }
+    .text-xs { font-size: 11px; }
+    .fw6 { font-weight: 600; }
+    .fw7 { font-weight: 700; }
+    .red { color: var(--red); }
+    .green { color: var(--green); }
+
+    /* ── DIVIDER ─────────────────────────────── */
+    .divider { height: 1px; background: var(--border); margin: 0 16px; }
+
+    /* ── REP CARD ────────────────────────────── */
+    .rep-card {
+      background: white;
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      margin: 0 16px 12px;
+      overflow: hidden;
+    }
+    .rep-header {
+      background: linear-gradient(135deg, #0D1B2A 0%, #162336 100%);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .rep-avatar {
+      width: 52px; height: 52px;
+      background: rgba(242,101,34,0.2);
+      border: 2px solid var(--red);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .rep-name  { color: white; font-size: 16px; font-weight: 700; }
+    .rep-title { color: rgba(255,255,255,0.6); font-size: 12px; margin-top: 2px; }
+    .rep-actions {
+      display: flex;
+      border-top: 1px solid var(--border);
+    }
+    .rep-action {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 14px 8px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-2);
+      text-decoration: none;
+      border-right: 1px solid var(--border);
+      cursor: pointer;
+      transition: background 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .rep-action:last-child { border-right: none; }
+    .rep-action:active { background: var(--bg); }
+    .rep-action .rep-icon { font-size: 22px; }
+    .rep-action.whatsapp { color: #128C7E; }
+    .rep-action.call     { color: var(--brand-blue); }
+    .rep-action.email    { color: var(--red); }
+
+    /* ── ONBOARDING SCREEN ───────────────────── */
+    #screen-onboarding {
+      display: flex;
+      flex-direction: column;
+      background: var(--navy);
+      min-height: 100vh;
+      min-height: 100dvh;
+      padding-bottom: 0 !important;
+    }
+    .onboard-hero {
+      background: linear-gradient(165deg, #162336 0%, #0D1B2A 50%, #070f17 100%);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 32px 32px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .onboard-hero::before {
+      content: '»';
+      position: absolute;
+      right: -20px; top: 50%; transform: translateY(-50%);
+      font-size: 300px; font-weight: 900;
+      color: rgba(26,126,212,0.06);
+      line-height: 1; pointer-events: none; letter-spacing: -40px;
+    }
+    .onboard-logo { height: 52px; object-fit: contain; margin-bottom: 28px; position: relative; z-index: 1; }
+    .onboard-title { color: white; font-size: 24px; font-weight: 800; line-height: 1.2; margin-bottom: 10px; position: relative; z-index: 1; }
+    .onboard-sub   { color: rgba(255,255,255,0.55); font-size: 14px; line-height: 1.6; position: relative; z-index: 1; }
+
+    .onboard-form {
+      background: white;
+      border-radius: 28px 28px 0 0;
+      padding: 28px 24px calc(env(safe-area-inset-bottom, 0px) + 28px);
+    }
+    .onboard-form h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+    .onboard-form p  { font-size: 13px; color: var(--text-2); line-height: 1.5; margin-bottom: 20px; }
+    .url-input-wrap {
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: var(--r);
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      transition: border-color 0.2s;
+    }
+    .url-input-wrap:focus-within { border-color: var(--brand-blue); }
+    .url-input-wrap label { font-size: 11px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: .5px; display: block; margin-bottom: 4px; }
+    .url-input-wrap input {
+      width: 100%; border: none; background: none; font-size: 13px;
+      font-family: 'Montserrat', sans-serif; color: var(--text);
+      outline: none;
+    }
+    .url-input-wrap input::placeholder { color: var(--text-3); }
+    .onboard-btn {
+      width: 100%; background: var(--red); color: white;
+      border: none; border-radius: var(--r); padding: 16px;
+      font-size: 16px; font-weight: 700; font-family: 'Montserrat', sans-serif;
+      cursor: pointer; transition: background 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .onboard-btn:active { background: var(--red-dark); }
+    .onboard-btn:disabled { background: var(--border); color: var(--text-3); cursor: not-allowed; }
+    .onboard-error { font-size: 12px; color: var(--red); margin-top: 8px; display: none; }
+    .onboard-help  { text-align: center; font-size: 12px; color: var(--text-3); margin-top: 14px; line-height: 1.5; }
+
+    /* ── INSTALL BANNER ──────────────────────── */
+    .install-banner {
+      background: #0D1B2A;
+      color: white;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      gap: 8px;
+    }
+    .install-banner button {
+      background: var(--red);
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .install-banner .close-x {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.5);
+      font-size: 18px;
+      cursor: pointer;
+      padding: 0 2px;
+      line-height: 1;
+    }
+  </style>
+</head>
+
+<body>
+<div id="app">
+
+  <!-- INSTALL BANNER -->
+  <div class="install-banner" id="installBanner" style="display:none;">
+    <span>📲 Añade esta app a tu pantalla de inicio</span>
+    <button onclick="promptInstall()">Instalar</button>
+    <button class="close-x" onclick="document.getElementById('installBanner').style.display='none'">×</button>
+  </div>
+
+  <!-- ╔══════════ ONBOARDING ══════════╗ -->
+  <div id="screen-onboarding" class="screen" style="display:block">
+    <div class="onboard-hero">
+      <!-- TPX Logo — CSS, no image dependency -->
+      <div style="display:flex;align-items:center;gap:0;margin-bottom:28px;position:relative;z-index:1;">
+        <div style="width:5px;height:52px;background:#F26522;border-radius:3px;margin-right:12px;flex-shrink:0;"></div>
+        <div>
+          <div style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:32px;color:white;line-height:1;letter-spacing:2px;">TPX</div>
+          <div style="font-family:'Montserrat',sans-serif;font-weight:500;font-size:9px;color:rgba(255,255,255,0.6);letter-spacing:3px;text-transform:uppercase;margin-top:3px;">T-SHIRT PRINT XPRESS</div>
+        </div>
+      </div>
+      <div class="onboard-title">Portal del Cliente</div>
+      <div class="onboard-sub">Accede a tus órdenes, facturas y realiza pagos directamente desde tu teléfono.</div>
+    </div>
+
+    <div class="onboard-form">
+      <!-- Rep greeting — shown when client scans salesperson's QR -->
+      <div id="onboardRepGreeting" style="display:none;background:var(--bg);border-radius:var(--r-sm);padding:12px 14px;margin-bottom:16px;align-items:center;gap:12px;">
+        <div style="width:44px;height:44px;background:linear-gradient(135deg,#0D1B2A,#162336);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;" id="onboardRepEmoji">👨‍💼</div>
+        <div>
+          <div style="font-size:11px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:.4px;">Tu representante</div>
+          <div style="font-size:15px;font-weight:700;" id="onboardRepName">—</div>
+          <div style="font-size:12px;color:var(--text-2);" id="onboardRepTitle">—</div>
+        </div>
+      </div>
+
+      <h3>¡Bienvenido! 👋</h3>
+      <p>Completa tu información una sola vez para acceder a tus órdenes.</p>
+
+      <div class="url-input-wrap" style="margin-bottom:10px;">
+        <label>Tu nombre</label>
+        <input type="text" id="clientNameInput"
+               placeholder="Ej. María García"
+               autocomplete="name" autocapitalize="words" spellcheck="false">
+      </div>
+
+      <div class="url-input-wrap">
+        <label>Tu link único de cliente</label>
+        <input type="text" id="clientUrlInput"
+               placeholder="https://t-shirt-print-xpress.printavo.com/customer/..."
+               autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false"
+               oninput="onboardInputChanged()"
+               onpaste="setTimeout(onboardInputChanged, 50)"
+               onchange="onboardInputChanged()">
+      </div>
+      <div class="onboard-error" id="onboardError">
+        ⚠️ Por favor ingresa un link válido de T-Shirt Print Xpress.
+      </div>
+
+      <!-- Rep selector — shown only when no ?rep= in URL -->
+      <div id="repSelectorWrap" style="display:none;margin-bottom:14px;">
+        <div class="url-input-wrap">
+          <label>Tu representante de ventas</label>
+          <select id="repSelector" style="width:100%;border:none;background:none;font-size:14px;font-family:'Montserrat',sans-serif;color:var(--text);outline:none;padding:2px 0;">
+          </select>
+        </div>
+      </div>
+
+      <button class="onboard-btn" id="onboardBtn" onclick="saveClientUrl()">
+        Acceder a mis órdenes →
+      </button>
+
+      <div class="onboard-help">
+        ¿No tienes tu link? Contáctanos al<br>
+        <a href="tel:+17877441472" style="color:var(--brand-blue);font-weight:600;">787-744-1472</a>
+        o escríbenos por
+        <a href="https://wa.me/17877441472" target="_blank" style="color:#128C7E;font-weight:600;">WhatsApp</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ╔══════════ HOME ══════════╗ -->
+  <div id="screen-home" class="screen" style="display:none">
+    <!-- Header -->
+    <div class="top-header">
+      <div style="display:flex;align-items:center;gap:0;">
+        <div style="width:4px;height:34px;background:#F26522;border-radius:2px;margin-right:9px;flex-shrink:0;"></div>
+        <div>
+          <div style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:22px;color:white;line-height:1;letter-spacing:1px;">TPX</div>
+          <div style="font-family:'Montserrat',sans-serif;font-weight:500;font-size:7px;color:rgba(255,255,255,0.6);letter-spacing:2px;text-transform:uppercase;margin-top:2px;">T-SHIRT PRINT XPRESS</div>
+        </div>
+      </div>
+      <div class="badge-count" id="activeCount">1</div>
+    </div>
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="greeting">Bienvenido de vuelta</div>
+      <div class="name" id="heroName">Miguel Ramos</div>
+      <div class="balance-card">
+        <div>
+          <div class="label">Balance pendiente</div>
+          <div class="amount owed" id="heroBalance">$1,945.16</div>
+        </div>
+        <a id="heroPayBtn" class="pay-btn" href="https://t-shirt-print-xpress.printavo.com/invoice/ed5692287f79badadc57ee24fddff4c7" target="_blank">
+          💳 Pagar
+        </a>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+      <!-- Rep bar — always first thing after the hero -->
+      <div class="section-label">Tu Representante</div>
+      <div id="homeRepBar" style="margin-bottom:4px;"></div>
+
+      <div class="section-label mt16">Órdenes activas</div>
+      <div id="activeOrdersList"></div>
+
+      <div class="section-label mt16">Completadas recientemente</div>
+      <div id="recentOrdersList"></div>
+
+      <div style="text-align:center; padding: 8px 0 4px;">
+        <button onclick="showScreen('orders')" style="background:none;border:none;color:var(--red);font-size:14px;font-weight:600;cursor:pointer;">Ver todas las órdenes →</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ╔══════════ ORDERS ══════════╗ -->
+  <div id="screen-orders" class="screen" style="display:none">
+    <div class="top-header">
+      <div style="display:flex;align-items:center;gap:0;">
+        <div style="width:4px;height:34px;background:#F26522;border-radius:2px;margin-right:9px;flex-shrink:0;"></div>
+        <div>
+          <div style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:22px;color:white;line-height:1;letter-spacing:1px;">TPX</div>
+          <div style="font-family:'Montserrat',sans-serif;font-weight:500;font-size:7px;color:rgba(255,255,255,0.6);letter-spacing:2px;text-transform:uppercase;margin-top:2px;">T-SHIRT PRINT XPRESS</div>
+        </div>
+      </div>
+      <span style="color:white;font-weight:700;font-size:15px;letter-spacing:.5px;">Mis Órdenes</span>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" id="tab-active" onclick="switchTab('active')">Activas</button>
+      <button class="tab" id="tab-history" onclick="switchTab('history')">Historial</button>
+    </div>
+
+    <div class="content" style="padding-top:0;">
+      <div id="ordersActive"></div>
+      <div id="ordersHistory" style="display:none;"></div>
+    </div>
+  </div>
+
+  <!-- ╔══════════ DETAIL ══════════╗ -->
+  <div id="screen-detail" class="screen" style="display:none">
+    <div class="back-header">
+      <button class="back-btn" onclick="goBack()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <h2 id="detailHeaderTitle">Detalle de Orden</h2>
+    </div>
+    <div id="detailContent"></div>
+  </div>
+
+  <!-- ╔══════════ PROFILE ══════════╗ -->
+  <div id="screen-profile" class="screen" style="display:none">
+    <div class="top-header">
+      <div style="display:flex;align-items:center;gap:0;">
+        <div style="width:4px;height:34px;background:#F26522;border-radius:2px;margin-right:9px;flex-shrink:0;"></div>
+        <div>
+          <div style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:22px;color:white;line-height:1;letter-spacing:1px;">TPX</div>
+          <div style="font-family:'Montserrat',sans-serif;font-weight:500;font-size:7px;color:rgba(255,255,255,0.6);letter-spacing:2px;text-transform:uppercase;margin-top:2px;">T-SHIRT PRINT XPRESS</div>
+        </div>
+      </div>
+      <span style="color:white;font-weight:700;font-size:15px;letter-spacing:.5px;">Mi Perfil</span>
+    </div>
+
+    <div class="profile-header">
+      <div class="avatar">👤</div>
+      <div class="profile-name" id="profileName">Miguel Ramos</div>
+      <div class="profile-email" id="profileEmail">m.ramos@tpxpr.com</div>
+    </div>
+
+    <!-- Rep Card (rendered by JS) -->
+    <div class="profile-section-title">Tu Representante de Ventas</div>
+    <div id="repCard"></div>
+
+    <div class="profile-section-title">Información de Cuenta</div>
+    <div class="menu-group">
+      <div class="menu-item">
+        <div class="menu-icon blue">📞</div>
+        <div><div class="label">Teléfono</div><div class="sub">787-923-9176</div></div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-icon blue">🏢</div>
+        <div><div class="label">Empresa</div><div class="sub">T-Shirt Print Xpress, Inc.</div></div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-icon blue">📍</div>
+        <div><div class="label">Dirección</div><div class="sub">10 Ave. Fomento, Villa Blanca, Caguas PR 00725</div></div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-icon gray">💳</div>
+        <div><div class="label">Términos de pago</div><div class="sub">COD – 11.5% tax</div></div>
+      </div>
+    </div>
+
+    <div class="profile-section-title">Acciones</div>
+    <div class="menu-group">
+      <a class="menu-item" href="https://t-shirt-print-xpress.printavo.com/customer/2b231484a463d1da96d0999e6aaf19b3" target="_blank">
+        <div class="menu-icon green">🔗</div>
+        <div><div class="label">Ver portal completo</div><div class="sub">Abrir en Printavo</div></div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-3)"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+      <a class="menu-item" href="tel:7877441472">
+        <div class="menu-icon red">📲</div>
+        <div><div class="label">Llamar a TPX PR</div><div class="sub">787-744-1472</div></div>
+      </a>
+      <a class="menu-item" href="mailto:m.ramos@tpxpr.com">
+        <div class="menu-icon gray">✉️</div>
+        <div><div class="label">Enviar correo</div><div class="sub">m.ramos@tpxpr.com</div></div>
+      </a>
+    </div>
+
+    <div class="profile-section-title">Mi Acceso</div>
+    <div class="menu-group" style="margin:0 16px 12px;">
+      <div class="menu-item" onclick="showMyLink()">
+        <div class="menu-icon gray">🔗</div>
+        <div><div class="label">Ver mi link único</div><div class="sub" id="savedLinkPreview">No configurado</div></div>
+      </div>
+      <div class="menu-item" onclick="resetClientUrl()" style="color:var(--red);">
+        <div class="menu-icon red">🔄</div>
+        <div class="label" style="color:var(--red);">Cambiar link</div>
+      </div>
+    </div>
+
+    <div style="text-align:center;padding:24px 16px;color:var(--text-3);font-size:12px;">
+      TPX PR Portal · v1.0<br>
+      <a href="https://tpxpr.com" target="_blank" style="color:var(--red);text-decoration:none;font-weight:600;">tpxpr.com</a>
+    </div>
+  </div>
+
+  <!-- ╔══════════ ADMIN / QR GENERATOR ══════════╗ -->
+  <div id="screen-admin" class="screen" style="display:none;background:var(--bg);">
+    <div style="background:#0D1B2A;padding:calc(env(safe-area-inset-top,16px)+14px) 20px 18px;display:flex;align-items:center;gap:12px;">
+      <div style="display:flex;align-items:center;gap:0;">
+        <div style="width:4px;height:34px;background:#F26522;border-radius:2px;margin-right:9px;flex-shrink:0;"></div>
+        <div>
+          <div style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:22px;color:white;line-height:1;letter-spacing:1px;">TPX</div>
+          <div style="font-family:'Montserrat',sans-serif;font-weight:500;font-size:7px;color:rgba(255,255,255,0.6);letter-spacing:2px;text-transform:uppercase;margin-top:2px;">T-SHIRT PRINT XPRESS</div>
+        </div>
+      </div>
+      <span style="color:white;font-weight:700;font-size:15px;margin-left:auto;">Admin · QR Codes</span>
+    </div>
+
+    <div style="padding:16px;">
+      <div style="background:white;border-radius:var(--r);box-shadow:var(--shadow);padding:14px 16px;margin-bottom:16px;">
+        <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-2);margin-bottom:8px;">URL base del app (donde está alojado)</div>
+        <input id="adminBaseUrl" type="url"
+          style="width:100%;border:2px solid var(--border);border-radius:var(--r-sm);padding:10px 12px;font-size:13px;font-family:'Montserrat',sans-serif;outline:none;"
+          placeholder="https://portal.tpxpr.com/tpx-portal.html"
+          oninput="regenerateQRs()"
+          value="">
+        <div style="font-size:11px;color:var(--text-3);margin-top:6px;">Actualiza esto con la URL real una vez que subas el app al servidor.</div>
+      </div>
+
+      <div id="adminQrList"></div>
+    </div>
+  </div>
+
+  <!-- ╔══════════ BOTTOM NAV ══════════╗ -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" id="nav-home" onclick="showScreen('home')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Inicio
+    </button>
+    <button class="nav-item" id="nav-orders" onclick="showScreen('orders')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      Órdenes
+    </button>
+    <button class="nav-item" id="nav-profile" onclick="showScreen('profile')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Perfil
+    </button>
+  </nav>
+</div>
+
+<script>
+// ── SALES REPS DATABASE ───────────────────────────────────────────────────────
+// Agrega aquí a cada vendedor. El código en la URL (?rep=codigo) los identifica.
+const REPS = {
+  'miguel': {
+    name:     'Miguel A. Ramos',
+    title:    'Director de Ventas y Administración',
+    phone:    '7879239176',
+    email:    'm.ramos@tpxpr.com',
+    emoji:    '👨‍💼',
+    whatsapp:  true,
+    instagram: 'tshirtprintxpress',
+    facebook:  'tpxpr',
+    dotcard:   'https://dot.cards/miguel_tpx'
+  },
+  'malorie': {
+    name:    'Malorie Montañez',
+    title:   'Representante de Ventas',
+    phone:   '7876971040',
+    email:   'm.montanez@tpxpr.com',
+    emoji:   '👩‍💼',
+    whatsapp: true
+  },
+  'jhadieliz': {
+    name:    'Jhadieliz Torres',
+    title:   'Representante de Ventas',
+    phone:   '7875041472',
+    email:   'j.torres@tpxpr.com',
+    emoji:   '👩‍💼',
+    whatsapp: true
+  },
+  'bryan': {
+    name:    'Bryan Cruz',
+    title:   'Representante de Ventas',
+    phone:   '7872471472',
+    email:   'b.cruz@tpxpr.com',
+    emoji:   '👨‍💼',
+    whatsapp: true
+  },
+  'mayling': {
+    name:    'Mayling Meléndez',
+    title:   'Representante de Ventas',
+    phone:   '7876020114',
+    email:   'm.melendez@tpxpr.com',
+    emoji:   '👩‍💼',
+    whatsapp: true
+  },
+  'areliz': {
+    name:    'Areliz Cartagena',
+    title:   'Supervisora de Ventas',
+    phone:   '7874202202',
+    email:   'a.cartagena@tpxpr.com',
+    emoji:   '👩‍💼',
+    whatsapp: true
+  },
+};
+
+// ── URL PARAMS ────────────────────────────────────────────────────────────────
+const urlParams  = new URLSearchParams(window.location.search);
+const repCode    = (urlParams.get('rep') || 'miguel').toLowerCase();
+const ACTIVE_REP = REPS[repCode] || REPS['miguel'];
+
+// Printavo URL from ?client= param or localStorage
+const PRINTAVO_BASE = 'printavo.com/customer/';
+let CLIENT_URL  = null;   // full URL, e.g. https://t-shirt-print-xpress.printavo.com/customer/HASH
+let CLIENT_HASH = null;   // just the hash, e.g. 2b231484a463d1da96d0999e6aaf19b3
+let CLIENT_ACCT = null;   // subdomain, e.g. t-shirt-print-xpress
+
+// ── ONBOARDING LOGIC ─────────────────────────────────────────────────────────
+function extractPrintavoInfo(url) {
+  try {
+    const u = new URL(url.trim());
+    // Must be *.printavo.com/customer/HASH
+    if (!u.hostname.endsWith('.printavo.com')) return null;
+    const parts = u.pathname.split('/').filter(Boolean);
+    if (parts[0] !== 'customer' || !parts[1]) return null;
+    return { hash: parts[1], acct: u.hostname.split('.')[0], full: url.trim() };
+  } catch { return null; }
+}
+
+function onboardInputChanged() {
+  const val = (document.getElementById('clientUrlInput')?.value || '').trim();
+  const err = document.getElementById('onboardError');
+  // Hide error while typing; re-validate silently
+  if (err && val.length < 10) err.style.display = 'none';
+}
+
+function validateOnboardUrl(val) {
+  // kept for backwards compat — delegates to new handler
+  onboardInputChanged();
+}
+
+function saveClientUrl() {
+  const val = (document.getElementById('clientUrlInput')?.value || '').trim();
+  const err = document.getElementById('onboardError');
+
+  // Validate
+  let hash = null, acct = null;
+  try {
+    const u = new URL(val);
+    if (u.hostname.endsWith('.printavo.com')) {
+      const parts = u.pathname.split('/').filter(Boolean);
+      if (parts[0] === 'customer' && parts[1]) {
+        hash = parts[1];
+        acct = u.hostname.split('.')[0];
+      }
+    }
+  } catch(e) {}
+
+  if (!hash) {
+    if (err) err.style.display = 'block';
+    return;
+  }
+
+  // Save to localStorage
+  const clientName = (document.getElementById('clientNameInput')?.value || '').trim();
+  try {
+    localStorage.setItem('tpx_client_url',  val);
+    localStorage.setItem('tpx_client_hash', hash);
+    localStorage.setItem('tpx_client_acct', acct);
+    localStorage.setItem('tpx_client_rep',  rep);
+    if (clientName) localStorage.setItem('tpx_client_name', clientName);
+  } catch(e) {}
+
+  // Reload the page with client params — most reliable way to show the app
+  const base = window.location.href.split('?')[0];
+  // Use ?rep= from URL, or from the selector if shown, or default to 'ventas'
+  const selEl = document.getElementById('repSelector');
+  const rep   = urlParams.get('rep') || (selEl && selEl.value) || 'miguel';
+  window.location.href = `${base}?client=${hash}&acct=${acct}&rep=${rep}`;
+}
+
+function resetClientUrl() {
+  if (!confirm('¿Seguro que deseas cambiar tu link de cliente?')) return;
+  localStorage.removeItem('tpx_client_url');
+  localStorage.removeItem('tpx_client_hash');
+  localStorage.removeItem('tpx_client_acct');
+  localStorage.removeItem('tpx_client_rep');
+  localStorage.removeItem('tpx_client_name');
+  CLIENT_URL = null; CLIENT_HASH = null; CLIENT_ACCT = null;
+  // Hide main app, show onboarding
+  document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
+  document.getElementById('screen-onboarding').style.display = 'block';
+  document.querySelector('.bottom-nav').style.display = 'none';
+}
+
+function showMyLink() {
+  if (CLIENT_URL) alert('Tu link único:\n\n' + CLIENT_URL);
+  else alert('No hay link configurado todavía.');
+}
+
+// ── FETCH REAL PRINTAVO DATA ───────────────────────────────────────────────────
+async function fetchPrintavoData(hash, acct) {
+  try {
+    // Call our Netlify Function proxy
+    const apiBase = window.location.origin; // same domain as the app
+    const res  = await fetch(`${apiBase}/.netlify/functions/printavo?hash=${hash}&acct=${acct}`);
+    if (!res.ok) throw new Error('API error');
+    const data = await res.json();
+
+    // Update customer name if returned and no manual name was set
+    const savedName = localStorage.getItem('tpx_client_name');
+    if (data.customerName && !savedName) {
+      CLIENT.name = data.customerName;
+      try { localStorage.setItem('tpx_client_name', data.customerName); } catch(e) {}
+      const heroName    = document.getElementById('heroName');
+      const profileName = document.getElementById('profileName');
+      if (heroName)    heroName.textContent    = data.customerName;
+      if (profileName) profileName.textContent = data.customerName;
+    }
+
+    // Replace ORDERS with real data
+    if (data.orders && data.orders.length > 0) {
+      ORDERS.length = 0;
+      data.orders.forEach(o => {
+        ORDERS.push({
+          id:          o.id,
+          hash:        o.hash,
+          name:        o.name,
+          status:      o.outstanding > 0 ? 'active' : 'done',
+          statusLabel: o.outstanding > 0 ? '➡️ Activa' : '🥳 Completada',
+          due:         o.due,
+          total:       o.outstanding,
+          paid:        0,
+          outstanding: o.outstanding,
+          items:       []
+        });
+      });
+      // Re-render with fresh data
+      try { renderHome();   } catch(e) { console.error(e); }
+      try { renderOrders(); } catch(e) { console.error(e); }
+    }
+  } catch(e) {
+    // Silently fail — app still works, just shows demo data
+    console.warn('Could not fetch Printavo data:', e.message);
+  }
+}
+
+function loadClientSession(info) {
+  CLIENT_URL  = info.full;
+  CLIENT_HASH = info.hash;
+  CLIENT_ACCT = info.acct;
+
+  // Restore client name (entered in onboarding or saved)
+  const savedName = localStorage.getItem('tpx_client_name');
+  if (savedName) {
+    CLIENT.name = savedName;
+    const heroName = document.getElementById('heroName');
+    if (heroName) heroName.textContent = savedName;
+    const profileName = document.getElementById('profileName');
+    if (profileName) profileName.textContent = savedName;
+  }
+
+  // Fetch real order data from Netlify Function (proxy to Printavo)
+  fetchPrintavoData(info.hash, info.acct);
+
+  // Update profile link preview
+  const el = document.getElementById('savedLinkPreview');
+  if (el) el.textContent = `.../${CLIENT_HASH.slice(0,8)}...`;
+
+  // Update the "Ver portal completo" link in profile
+  const portalLink = document.querySelector('a[href*="printavo.com/customer/"]');
+  if (portalLink) portalLink.href = CLIENT_URL;
+
+  // Update the Printavo portal URL
+  CLIENT.printavoUrl = CLIENT_URL;
+
+  // Hide onboarding, show main app
+  const onboarding = document.getElementById('screen-onboarding');
+  if (onboarding) onboarding.style.display = 'none';
+
+  const nav = document.querySelector('.bottom-nav');
+  if (nav) nav.style.display = 'flex';
+
+  showScreen('home');
+
+  // Render screens (wrapped individually so one failure doesn't block others)
+  try { renderHome(); }    catch(e) { console.error('renderHome:', e); }
+  try { renderOrders(); }  catch(e) { console.error('renderOrders:', e); }
+  try { renderRepCard(); } catch(e) { console.error('renderRepCard:', e); }
+}
+
+// ── DATA ─────────────────────────────────────────────────────────────────────
+const CLIENT = {
+  name: 'Miguel Ramos',
+  company: 'T-Shirt Print Xpress, Inc.',
+  email: 'm.ramos@tpxpr.com',
+  phone: '787-923-9176',
+  printavoUrl: 'https://t-shirt-print-xpress.printavo.com/customer/2b231484a463d1da96d0999e6aaf19b3'
+};
+
+const ORDERS = [
+  {
+    id: '135077',
+    hash: 'ed5692287f79badadc57ee24fddff4c7',
+    name: 'Mercancía Evento Miss Universe 2026',
+    status: 'active',
+    statusLabel: '➡️ Orden Nueva',
+    due: 'Jun 19, 2026',
+    created: 'Jun 15, 2026',
+    prodDue: 'Jun 18, 2026',
+    total: 1945.16,
+    paid: 0,
+    outstanding: 1945.16,
+    delivery: 'Pick-up',
+    terms: 'COD',
+    items: [
+      { sku: '1580N', color: 'White', desc: "Next Level – Women's Ideal Crop Top", qty: 24, price: 4.06, total: 97.44 },
+      { sku: '1580N', color: 'Black', desc: "Next Level – Women's Ideal Crop Top", qty: 42, price: 4.06, total: 170.52 },
+      { sku: 'A8100', color: 'Black', desc: 'MEN 60-40 T-SHIRT', qty: 156, price: 3.20, total: 499.20 },
+      { sku: 'A8130', color: 'Black', desc: 'AP O/S Heavy Tee', qty: 45, price: 6.45, total: 290.25 },
+      { sku: 'A8130', color: 'Natural', desc: 'AP O/S Heavy Tee', qty: 45, price: 6.45, total: 290.25 },
+      { sku: 'VC300A', color: 'Black', desc: "Valucap Bio-Washed Dad Hat", qty: 36, price: 3.75, total: 135.00 },
+      { sku: 'QTB', color: 'Black', desc: 'Q-Tees Economical Tote', qty: 250, price: 1.85, total: 462.50 }
+    ]
+  },
+  {
+    id: '131198',
+    hash: '8ff4cda025338f8b8b4f613f7f1474c1',
+    name: 'T-Shirts Field Day Thea',
+    status: 'done',
+    statusLabel: '🥳 Orden Completada',
+    due: 'Mar 17, 2026',
+    created: 'Feb 2026',
+    total: 0,
+    paid: 0,
+    outstanding: 0,
+    items: []
+  },
+  {
+    id: '130667',
+    hash: '1302edd7152cc58f127a57b949460ae3',
+    name: 'Tote Bags Science Fair',
+    status: 'done',
+    statusLabel: '🥳 Orden Completada',
+    due: 'Feb 27, 2026',
+    total: 0,
+    paid: 0,
+    outstanding: 0,
+    items: []
+  },
+  {
+    id: '128943',
+    hash: '071f7ab0cfdfbdc0938759ff07acf565',
+    name: 'RFQ – Customer Service Uniform 2025 · Muestras',
+    status: 'paid',
+    statusLabel: '🥳 Orden Completada',
+    due: 'Jan 13, 2026',
+    total: 0,
+    paid: 0,
+    outstanding: 0,
+    items: []
+  },
+  {
+    id: '128557',
+    hash: '065480e35165e74f88007cf92a5548bb',
+    name: 'Muestras Relevo 2026',
+    status: 'done',
+    statusLabel: '🥳 Orden Completada',
+    due: 'Dec 17, 2025',
+    total: 0,
+    paid: 0,
+    outstanding: 0,
+    items: []
+  },
+  {
+    id: '128336',
+    hash: 'adc63d506c8918c9ee630c43d62b5',
+    name: 'Muestra Sociedad Americana Misión 2050',
+    status: 'paid',
+    statusLabel: '🥳 Orden Completada',
+    due: 'Dec 10, 2025',
+    total: 0,
+    paid: 0,
+    outstanding: 0,
+    items: []
+  },
+  {
+    id: '127087',
+    hash: '14ec87ad5b71830586dbec531486c41f',
+    name: 'T-Shirts Halloween 2025',
+    status: 'done',
+    statusLabel: '🥳 Orden Completada',
+    due: 'Oct 30, 2025',
+    total: 0,
+    paid: 0,
+    outstanding: 0,
+    items: []
+  },
+  {
+    id: '126235',
+    hash: '8f1e120276ffe2de88a1bd6aa9a970e7',
+    name: 'Jackets Muestra Triple-S',
+    status: 'paid',
+    statusLabel: '🥳 Orden Completada',
+    due: 'Oct 7, 2025',
+    total: 0,
+    paid: 0,
+    outstanding: 0,
+    items: []
+  },
+  {
+    id: '125323',
+    hash: 'd296962bd79e13300df924f0e9c7f225',
+    name: 'Muestrario Claro',
+    status: 'paid',
+    statusLabel: '🥳 Orden Completada',
+    due: 'Sep 10, 2025',
+    total: 0,
+    paid: 0,
+    outstanding: 0,
+    items: []
+  },
+  {
+    id: '122824',
+    hash: 'd9eab1bc57a3fc7d7e563cb464e05df0',
+    name: 'Camisas MIDA 2025',
+    status: 'paid',
+    statusLabel: '🥳 Orden Completada',
+    due: 'Jun 20, 2025',
+    total: 0,
+    paid: 0,
+    outstanding: 0,
+    items: []
+  },
+  {
+    id: '122805',
+    hash: 'ef7509af635a05d1311ee80bf5e197df',
+    name: 'Camisas MIDA 2025 (B)',
+    status: 'paid',
+    statusLabel: '🥳 Orden Completada',
+    due: 'Jun 20, 2025',
+    total: 0,
+    paid: 0,
+    outstanding: 0,
+    items: []
+  },
+  {
+    id: '122804',
+    hash: '14f0575e4c7abe2c06a7af6b3d40b5da',
+    name: 'Camisas MIDA 2025 (C)',
+    status: 'paid',
+    statusLabel: '🥳 Orden Completada',
+    due: 'Jun 20, 2025',
+    total: 0,
+    paid: 0,
+    outstanding: 0,
+    items: []
+  },
+  {
+    id: '122745',
+    hash: '518b7e53ef23b8d2116ca58c3e4eaf8a',
+    name: 'Camisas MIDA 2025 (D)',
+    status: 'paid',
+    statusLabel: '🥳 Orden Completada',
+    due: 'Jun 18, 2025',
+    total: 0,
+    paid: 0,
+    outstanding: 0,
+    items: []
+  },
+  {
+    id: '109062',
+    hash: '00fa9ab5b2b919da13b4c65e82eb4197',
+    name: 'T-Shirts Super Chef Celebrities',
+    status: 'paid',
+    statusLabel: '🥳 Orden Completada',
+    due: 'Apr 25, 2024',
+    total: 0,
+    paid: 0,
+    outstanding: 0,
+    items: []
+  },
+  {
+    id: '103263',
+    hash: '485dbcb812657a875fbcdf7c72bcff99',
+    name: 'Addams',
+    status: 'paid',
+    statusLabel: '🥳 Orden Completada',
+    due: 'Oct 27, 2023',
+    total: 0,
+    paid: 0,
+    outstanding: 0,
+    items: []
+  },
+  {
+    id: '100374',
+    hash: '7f71337f277018f3ffa93f879e29e90f',
+    name: 'Muestras PC61',
+    status: 'paid',
+    statusLabel: '🥳 Orden Completada',
+    due: 'Aug 18, 2023',
+    total: 0,
+    paid: 0,
+    outstanding: 0,
+    items: []
+  }
+];
+
+function invoiceUrl(hash)  { return `https://t-shirt-print-xpress.printavo.com/invoice/${hash}`; }
+function pdfUrl(hash)      { return `https://t-shirt-print-xpress.printavo.com/invoice/${hash}.pdf`; }
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let currentScreen = 'home';
+let prevScreen    = 'home';
+let currentTab    = 'active';
+let deferredPrompt = null;
+
+// ── NAVIGATION ────────────────────────────────────────────────────────────────
+function showScreen(id) {
+  // Hide all screens using inline style (guaranteed to work)
+  document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  // Show target screen
+  const target = document.getElementById('screen-' + id);
+  if (target) { target.style.display = 'block'; target.scrollTop = 0; }
+  const navEl = document.getElementById('nav-' + id);
+  if (navEl) navEl.classList.add('active');
+  prevScreen = currentScreen;
+  currentScreen = id;
+}
+
+function goBack() { showScreen(prevScreen === currentScreen ? 'home' : prevScreen); }
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById('tab-active').classList.toggle('active', tab === 'active');
+  document.getElementById('tab-history').classList.toggle('active', tab === 'history');
+  document.getElementById('ordersActive').style.display  = tab === 'active'  ? '' : 'none';
+  document.getElementById('ordersHistory').style.display = tab === 'history' ? '' : 'none';
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function fmtMoney(n) {
+  return n === 0 ? '$0.00' : '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function statusBadge(order) {
+  if (order.outstanding > 0) return `<span class="badge pending">⏳ Pago Pendiente</span>`;
+  if (order.status === 'paid') return `<span class="badge paid">✅ Pagada</span>`;
+  if (order.status === 'done') return `<span class="badge done">🥳 Completada</span>`;
+  return `<span class="badge active">➡️ En Proceso</span>`;
+}
+
+function orderIcon(order) {
+  if (order.outstanding > 0) return { cls: 'active', emoji: '🧾' };
+  if (order.status === 'paid') return { cls: 'paid', emoji: '✅' };
+  return { cls: 'done', emoji: '📦' };
+}
+
+// ── RENDER FUNCTIONS ──────────────────────────────────────────────────────────
+function renderOrderCard(order, onclick) {
+  const { cls, emoji } = orderIcon(order);
+  const amountCls = order.outstanding > 0 ? 'owed' : 'zero';
+  const amountTxt = order.outstanding > 0 ? fmtMoney(order.outstanding) : '✓ Pagada';
+  return `
+    <div class="order-card" onclick="${onclick}">
+      <div class="order-icon ${cls}">${emoji}</div>
+      <div class="order-body">
+        <div class="order-num">#${order.id}</div>
+        <div class="order-name">${order.name}</div>
+        <div class="order-meta">Vence: ${order.due}</div>
+      </div>
+      <div class="order-right">
+        <div class="order-amount ${amountCls}">${amountTxt}</div>
+        <div class="chevron">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderHome() {
+  const active  = ORDERS.filter(o => o.outstanding > 0);
+  const recent  = ORDERS.filter(o => o.outstanding === 0).slice(0, 3);
+  const totalOwed = active.reduce((s, o) => s + o.outstanding, 0);
+
+  document.getElementById('heroBalance').textContent = fmtMoney(totalOwed);
+  document.getElementById('heroBalance').className = 'amount' + (totalOwed > 0 ? ' owed' : ' zero');
+  document.getElementById('activeCount').textContent = active.length;
+
+  if (active.length > 0) {
+    document.getElementById('heroPayBtn').href = invoiceUrl(active[0].hash);
+    document.getElementById('heroPayBtn').style.display = '';
+  } else {
+    document.getElementById('heroPayBtn').style.display = 'none';
+  }
+
+  // Active orders
+  const al = document.getElementById('activeOrdersList');
+  if (active.length === 0) {
+    al.innerHTML = `<div class="empty-state"><div class="emoji">🎉</div><h3>Todo al día</h3><p>No tienes órdenes pendientes de pago.</p></div>`;
+  } else {
+    al.innerHTML = active.map(o => renderOrderCard(o, `showDetail('${o.id}')`)).join('');
+  }
+
+  // Recent
+  document.getElementById('recentOrdersList').innerHTML =
+    recent.map(o => renderOrderCard(o, `showDetail('${o.id}')`)).join('');
+}
+
+function renderOrders() {
+  const active  = ORDERS.filter(o => o.status === 'active' || o.outstanding > 0);
+  const history = ORDERS.filter(o => o.status !== 'active' && o.outstanding === 0);
+
+  document.getElementById('ordersActive').innerHTML = active.length
+    ? active.map(o => renderOrderCard(o, `showDetail('${o.id}')`)).join('')
+    : `<div class="empty-state"><div class="emoji">✅</div><h3>Sin órdenes activas</h3><p>Todas tus órdenes están completadas.</p></div>`;
+
+  document.getElementById('ordersHistory').innerHTML =
+    history.map(o => renderOrderCard(o, `showDetail('${o.id}')`)).join('');
+}
+
+function showDetail(id) {
+  const order = ORDERS.find(o => o.id === id);
+  if (!order) return;
+
+  document.getElementById('detailHeaderTitle').textContent = `Orden #${order.id}`;
+
+  const hasItems = order.items && order.items.length > 0;
+  const totalQty = hasItems ? order.items.reduce((s, i) => s + i.qty, 0) : null;
+
+  const itemsHTML = hasItems ? `
+    <div style="padding: 0 16px;">
+      <div class="section-label" style="padding-top:0;">Artículos (${totalQty} unidades)</div>
+    </div>
+    <div class="items-section">
+      ${order.items.map(item => `
+        <div class="item-card">
+          <div class="item-top">
+            <div>
+              <div class="item-name">${item.desc}</div>
+              <div class="item-sku">${item.sku} · ${item.color}</div>
+            </div>
+            <div class="item-price">${fmtMoney(item.total)}</div>
+          </div>
+          <div class="item-detail">${item.qty} unid. × ${fmtMoney(item.price)} c/u</div>
+        </div>
+      `).join('')}
+    </div>
+  ` : `
+    <div style="padding:0 16px;">
+      <div class="section-label" style="padding-top:0;">Artículos</div>
+    </div>
+    <div class="info-section">
+      <div style="padding:24px 16px;text-align:center;color:var(--text-2);font-size:14px;">
+        Ver detalle completo en Printavo 👇
+      </div>
+    </div>
+  `;
+
+  const totalsHTML = hasItems ? `
+    <div style="padding: 0 16px;">
+      <div class="section-label" style="padding-top:0;">Resumen</div>
+    </div>
+    <div class="totals-section">
+      <div class="total-row"><span>Subtotal</span><span>${fmtMoney(order.total)}</span></div>
+      <div class="total-row"><span>Impuesto</span><span>$0.00</span></div>
+      <div class="total-row grand"><span>Total</span><span>${fmtMoney(order.total)}</span></div>
+      <div class="total-row"><span>Pagado</span><span class="green">${fmtMoney(order.paid)}</span></div>
+      <div class="total-row ${order.outstanding > 0 ? 'outstanding' : ''}">
+        <span>${order.outstanding > 0 ? 'Balance Pendiente' : 'Balance'}</span>
+        <span>${order.outstanding > 0 ? fmtMoney(order.outstanding) : '✅ $0.00'}</span>
+      </div>
+    </div>
+  ` : '';
+
+  document.getElementById('detailContent').innerHTML = `
+    <!-- Hero -->
+    <div class="detail-hero">
+      <div class="detail-order-num">Orden #${order.id}</div>
+      <div class="detail-title">${order.name}</div>
+      <div class="detail-stats">
+        <div class="detail-stat">
+          <label>Vence</label>
+          <span>${order.due}</span>
+        </div>
+        <div class="detail-stat">
+          <label>Estado</label>
+          <span>${order.outstanding > 0 ? '⏳ Pendiente' : '✅ Pagada'}</span>
+        </div>
+        ${order.delivery ? `<div class="detail-stat"><label>Entrega</label><span>${order.delivery}</span></div>` : ''}
+      </div>
+    </div>
+
+    <!-- Status badge -->
+    <div style="padding: 14px 16px 0;">${statusBadge(order)}</div>
+
+    <!-- Action buttons -->
+    <div class="action-row">
+      ${order.outstanding > 0 ? `
+        <a class="action-btn primary" href="${invoiceUrl(order.hash)}" target="_blank">
+          <span class="icon">💳</span>
+          <span>Pagar Ahora</span>
+        </a>
+      ` : ''}
+      <a class="action-btn" href="${pdfUrl(order.hash)}" target="_blank">
+        <span class="icon">📄</span>
+        <span>Descargar PDF</span>
+      </a>
+      <a class="action-btn" href="${invoiceUrl(order.hash)}" target="_blank">
+        <span class="icon">🔗</span>
+        <span>Ver Factura</span>
+      </a>
+    </div>
+
+    <!-- Info -->
+    <div style="padding: 4px 16px 0;">
+      <div class="section-label" style="padding-top:0;">Detalles</div>
+    </div>
+    <div class="info-section">
+      <div class="info-row"><span class="key">Número</span><span class="val">#${order.id}</span></div>
+      ${order.created ? `<div class="info-row"><span class="key">Creada</span><span class="val">${order.created}</span></div>` : ''}
+      ${order.prodDue ? `<div class="info-row"><span class="key">Prod. lista</span><span class="val">${order.prodDue}</span></div>` : ''}
+      <div class="info-row"><span class="key">Fecha de entrega</span><span class="val">${order.due}</span></div>
+      ${order.terms ? `<div class="info-row"><span class="key">Términos</span><span class="val">${order.terms}</span></div>` : ''}
+      ${order.outstanding > 0
+        ? `<div class="info-row"><span class="key">Balance</span><span class="val red">${fmtMoney(order.outstanding)}</span></div>`
+        : `<div class="info-row"><span class="key">Balance</span><span class="val green">Pagada ✅</span></div>`}
+    </div>
+
+    ${itemsHTML}
+    ${totalsHTML}
+
+    <!-- Legal note -->
+    ${hasItems ? `
+    <div style="padding: 0 16px 8px;">
+      <div style="background:#FEF9C3;border-radius:var(--r-sm);padding:12px 14px;font-size:12px;color:#78350F;line-height:1.5;">
+        ⚠️ Todo trabajo requiere un depósito del 50%. Solo se aceptan cancelaciones dentro de 24 horas. La orden TIENE que ser pagada en su totalidad para ser entregada.
+      </div>
+    </div>
+    ` : ''}
+  `;
+
+  showScreen('detail');
+}
+
+// ── PWA INSTALL ───────────────────────────────────────────────────────────────
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('installBanner').style.display = 'flex';
+});
+
+function promptInstall() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(() => {
+      deferredPrompt = null;
+      document.getElementById('installBanner').style.display = 'none';
+    });
+  }
+}
+
+// ── PWA MANIFEST (dynamic, with embedded icon) ───────────────────────────────
+(function() {
+  const iconB64 = 'https://www.tpxpr.com/wp-content/uploads/2024/08/Favicoin_TPX-300x300.png';
+  const manifest = {
+    name: 'TPX PR – Portal del Cliente',
+    short_name: 'TPX PR',
+    description: 'T-Shirt Print Xpress – Portal de órdenes',
+    start_url: '.',
+    display: 'standalone',
+    background_color: '#ffffff',
+    theme_color: '#0D1B2A',
+    orientation: 'portrait',
+    icons: [
+      { src: iconB64, sizes: '192x192', type: 'image/svg+xml', purpose: 'any maskable' },
+      { src: iconB64, sizes: '512x512', type: 'image/svg+xml', purpose: 'any maskable' }
+    ]
+  };
+  const blob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+  const url  = URL.createObjectURL(blob);
+  const link = document.createElement('link');
+  link.rel   = 'manifest';
+  link.href  = url;
+  document.head.appendChild(link);
+})();
+
+// ── SERVICE WORKER ────────────────────────────────────────────────────────────
+if ('serviceWorker' in navigator) {
+  const swCode = `
+    const CACHE = 'tpx-v1';
+    self.addEventListener('install', e => {
+      e.waitUntil(caches.open(CACHE).then(c => c.addAll(['/tpx-portal.html'])));
+    });
+    self.addEventListener('fetch', e => {
+      e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
+    });
+  `;
+  const blob = new Blob([swCode], { type: 'application/javascript' });
+  const swUrl = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swUrl).catch(() => {});
+}
+
+// ── RENDER REP CARD ───────────────────────────────────────────────────────────
+function renderRepCard() {
+  const rep = ACTIVE_REP;
+  const waMsg = encodeURIComponent(`Hola ${rep.name}, tengo una pregunta sobre mi orden en TPX PR.`);
+  const waLink = `https://wa.me/1${rep.phone}?text=${waMsg}`;
+
+  const socialLinks = [
+    rep.instagram ? `<a href="https://instagram.com/${rep.instagram}" target="_blank" style="display:flex;align-items:center;gap:6px;font-size:13px;color:#E1306C;text-decoration:none;padding:8px 16px;border-bottom:1px solid var(--border);">📸 @${rep.instagram}</a>` : '',
+    rep.facebook  ? `<a href="https://facebook.com/${rep.facebook}"  target="_blank" style="display:flex;align-items:center;gap:6px;font-size:13px;color:#1877F2;text-decoration:none;padding:8px 16px;border-bottom:1px solid var(--border);">👍 facebook.com/${rep.facebook}</a>` : '',
+    rep.dotcard   ? `<a href="${rep.dotcard}" target="_blank" style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-2);text-decoration:none;padding:8px 16px;">🪪 Tarjeta digital</a>` : '',
+  ].filter(Boolean).join('');
+
+  const html = `
+    <div class="rep-card">
+      <div class="rep-header">
+        <div class="rep-avatar">${rep.emoji}</div>
+        <div>
+          <div class="rep-name">${rep.name}</div>
+          <div class="rep-title">${rep.title}</div>
+        </div>
+      </div>
+      <div class="rep-actions">
+        ${rep.whatsapp ? `
+        <a class="rep-action whatsapp" href="${waLink}" target="_blank">
+          <span class="rep-icon">💬</span>
+          WhatsApp
+        </a>` : ''}
+        <a class="rep-action call" href="tel:+1${rep.phone}">
+          <span class="rep-icon">📞</span>
+          Llamar
+        </a>
+        <a class="rep-action email" href="mailto:${rep.email}">
+          <span class="rep-icon">✉️</span>
+          Email
+        </a>
+      </div>
+      ${socialLinks ? `<div style="border-top:1px solid var(--border);">${socialLinks}</div>` : ''}
+    </div>
+  `;
+
+  // Profile page
+  const el = document.getElementById('repCard');
+  if (el) el.innerHTML = html;
+
+  // Also show compact rep bar on Home screen
+  const homeRepEl = document.getElementById('homeRepBar');
+  if (homeRepEl) {
+    homeRepEl.innerHTML = `
+      <div style="background:white;border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;">
+        <div style="padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:8px;">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:42px;height:42px;background:linear-gradient(135deg,#0D1B2A,#162336);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">${rep.emoji}</div>
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--text);">${rep.name}</div>
+              <div style="font-size:11px;color:var(--text-2);">${rep.title}</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;">
+            ${rep.whatsapp ? `<a href="${waLink}" target="_blank" style="width:38px;height:38px;background:#E7F8F5;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;" title="WhatsApp">💬</a>` : ''}
+            <a href="tel:+1${rep.phone}" style="width:38px;height:38px;background:var(--blue-bg);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;" title="Llamar">📞</a>
+            <a href="mailto:${rep.email}" style="width:38px;height:38px;background:#FEF0E8;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;" title="Email">✉️</a>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+}
+
+// ── ADMIN: QR CODE GENERATOR ─────────────────────────────────────────────────
+function renderAdminScreen() {
+  const list = document.getElementById('adminQrList');
+  if (!list) return;
+  list.innerHTML = '';
+
+  // Show entry for every rep (skip 'ventas' generic)
+  const repsToShow = Object.entries(REPS);
+
+  repsToShow.forEach(([code, rep]) => {
+    const baseUrl = (document.getElementById('adminBaseUrl')?.value || '').trim()
+      || window.location.href.split('?')[0];
+    const repUrl = `${baseUrl}?rep=${code}`;
+
+    const card = document.createElement('div');
+    card.style.cssText = 'background:white;border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,.08);padding:16px;margin-bottom:12px;';
+    card.innerHTML = `
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+        <div style="width:44px;height:44px;background:linear-gradient(135deg,#0D1B2A,#162336);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;">${rep.emoji}</div>
+        <div>
+          <div style="font-size:15px;font-weight:700;">${rep.name}</div>
+          <div style="font-size:12px;color:#6B7280;">${rep.title}</div>
+        </div>
+      </div>
+      <div id="qr-${code}" style="display:flex;justify-content:center;margin-bottom:12px;"></div>
+      <div style="background:#F2F4F7;border-radius:8px;padding:8px 10px;font-size:11px;word-break:break-all;color:#4B5563;margin-bottom:12px;">${repUrl}</div>
+      <div style="display:flex;gap:8px;">
+        <button onclick="downloadQR('${code}','${rep.name}')"
+          style="flex:1;background:#F26522;color:white;border:none;border-radius:10px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;">
+          ⬇️ Descargar QR
+        </button>
+        <button onclick="copyRepUrl('${repUrl}')"
+          style="background:#F2F4F7;border:none;border-radius:10px;padding:10px 14px;font-size:13px;cursor:pointer;font-family:'Montserrat',sans-serif;">
+          📋 Copiar URL
+        </button>
+      </div>
+    `;
+    list.appendChild(card);
+
+    // Generate QR code
+    setTimeout(() => {
+      const container = document.getElementById(`qr-${code}`);
+      if (container && window.QRCode) {
+        container.innerHTML = '';
+        new QRCode(container, {
+          text: repUrl,
+          width: 180, height: 180,
+          colorDark: '#0D1B2A',
+          colorLight: '#ffffff',
+          correctLevel: QRCode.CorrectLevel.H
+        });
+      }
+    }, 100);
+  });
+}
+
+function regenerateQRs() {
+  // Clear existing QRs and re-render
+  setTimeout(renderAdminScreen, 100);
+}
+
+function downloadQR(code, name) {
+  const container = document.getElementById(`qr-${code}`);
+  const canvas = container?.querySelector('canvas');
+  if (!canvas) { alert('QR aún generándose, espera un momento.'); return; }
+  const link = document.createElement('a');
+  link.download = `QR-TPX-${name.replace(/\s+/g,'-')}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+function copyRepUrl(url) {
+  navigator.clipboard.writeText(url).then(() => alert('✅ URL copiada al portapapeles.'));
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+(function init() {
+  // Hide bottom nav until client is identified
+  document.querySelector('.bottom-nav').style.display = 'none';
+
+  // 0. Admin mode: ?admin=true
+  if (urlParams.get('admin') === 'true') {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-admin').classList.add('active');
+    setTimeout(renderAdminScreen, 300);
+    return;
+  }
+
+  // 1. Rep greeting / selector on onboarding
+  const repGreeting = document.getElementById('onboardRepGreeting');
+  const repSelectorWrap = document.getElementById('repSelectorWrap');
+  const repSelector     = document.getElementById('repSelector');
+
+  if (urlParams.get('rep') && REPS[repCode]) {
+    // Specific rep via URL (?rep=xxx) — show their card
+    if (repGreeting) {
+      repGreeting.style.display = 'flex';
+      document.getElementById('onboardRepEmoji').textContent = ACTIVE_REP.emoji;
+      document.getElementById('onboardRepName').textContent  = ACTIVE_REP.name;
+      document.getElementById('onboardRepTitle').textContent = ACTIVE_REP.title;
+    }
+  } else {
+    // No rep in URL — show dropdown so client can pick their rep
+    if (repSelectorWrap && repSelector) {
+      repSelector.innerHTML = '';
+      Object.entries(REPS)
+        .forEach(([code, rep]) => {
+          const opt = document.createElement('option');
+          opt.value       = code;
+          opt.textContent = `${rep.emoji}  ${rep.name} — ${rep.title}`;
+          repSelector.appendChild(opt);
+        });
+      repSelectorWrap.style.display = 'block';
+    }
+  }
+
+  // 2. Check URL param ?client=HASH (TPX pre-configured link)
+  const clientParam = urlParams.get('client');
+  if (clientParam) {
+    const acctParam = urlParams.get('acct') || 't-shirt-print-xpress';
+    const fullUrl = `https://${acctParam}.printavo.com/customer/${clientParam}`;
+    const info = extractPrintavoInfo(fullUrl);
+    if (info) { loadClientSession(info); return; }
+  }
+
+  // 3. Check localStorage (returning client)
+  const savedUrl  = localStorage.getItem('tpx_client_url');
+  const savedHash = localStorage.getItem('tpx_client_hash');
+  const savedAcct = localStorage.getItem('tpx_client_acct');
+  const savedRep  = localStorage.getItem('tpx_client_rep');
+  if (savedUrl && savedHash) {
+    // If there's a saved rep that differs from the current URL rep, reload with it
+    if (savedRep && !urlParams.get('rep')) {
+      const base = window.location.href.split('?')[0];
+      window.location.href = `${base}?client=${savedHash}&acct=${savedAcct || 't-shirt-print-xpress'}&rep=${savedRep}`;
+      return;
+    }
+    loadClientSession({ full: savedUrl, hash: savedHash, acct: savedAcct || 't-shirt-print-xpress' });
+    return;
+  }
+
+  // 4. No client identified → show onboarding (already active by default)
+})();
+</script>
+</body>
+</html>
